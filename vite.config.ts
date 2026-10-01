@@ -4,11 +4,12 @@ import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = fileURLToPath(new URL(".", import.meta.url));
+const repositoryName = process.env.GITHUB_REPOSITORY?.split("/")[1];
 
 export default defineConfig({
   plugins: [react()],
-  base: process.env.GITHUB_REPOSITORY
-    ? `/${process.env.GITHUB_REPOSITORY.split("/")[1]}/`
+  base: repositoryName && !repositoryName.endsWith(".github.io")
+    ? `/${repositoryName}/`
     : "/",
   build: {
     rollupOptions: {
