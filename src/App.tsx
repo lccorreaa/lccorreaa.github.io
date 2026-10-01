@@ -76,7 +76,7 @@ function ProjectOverview({ project }: { project: (typeof projects)[number] }) {
   const [activation, setActivation] = useState(0);
 
   return (
-    <a id={project.id} href={`./project-${project.number}.html`} target="_blank" rel="noreferrer" aria-label={`Open the details page for Project ${project.number} in a new tab`} onMouseEnter={() => setActivation((value) => value + 1)} className="group scroll-mt-8 flex min-h-[420px] flex-col justify-between rounded-2xl border border-white/[0.08] bg-[#111311] p-7 transition-transform duration-150 hover:scale-[1.01] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-paper sm:min-h-[460px] sm:p-10 lg:p-12">
+    <a id={project.id} href={`./project-${project.number}.html`} aria-label={`Open the details page for Project ${project.number}`} onMouseEnter={() => setActivation((value) => value + 1)} className="group scroll-mt-8 flex min-h-[420px] flex-col justify-between rounded-2xl border border-white/[0.08] bg-[#111311] p-7 transition-transform duration-150 hover:scale-[1.01] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-paper sm:min-h-[460px] sm:p-10 lg:p-12">
       <p className="section-label">Project overview</p>
       <div className="mt-16 grid gap-8 sm:grid-cols-[1fr_1.2fr] sm:items-end">
         <div><p className="text-xs uppercase tracking-[0.18em] text-muted"><DecryptText text={`Project ${project.number}`} trigger={activation} /></p><h2 className="mt-4 font-display text-3xl font-bold tracking-[-0.05em] sm:text-5xl">Project title</h2></div>
@@ -89,7 +89,7 @@ function ProjectOverview({ project }: { project: (typeof projects)[number] }) {
 
 function AbstractGraphic() {
   return (
-    <div className="abstract-graphic absolute -right-4 top-10 h-[680px] w-[680px]" aria-hidden="true">
+    <div className="abstract-graphic absolute [right:clamp(-1rem,6vw,6rem)] top-10 h-[680px] w-[680px]" aria-hidden="true">
       <div className="hero-glow absolute inset-0 rounded-full" />
       <div className="orbit absolute right-[8%] top-[18%] h-[440px] w-[440px] rounded-full" />
       <div className="orbit orbit-two absolute right-[16%] top-[27%] h-[280px] w-[280px] rounded-full" />
@@ -172,8 +172,8 @@ export default function App() {
       <div className="relative z-10">
       <header className="absolute inset-x-0 top-0 z-10">
         <nav aria-label="Main navigation" className="mx-auto flex max-w-7xl items-center justify-between px-6 py-7 sm:px-10 lg:px-12">
-          <a className="font-display text-lg font-semibold tracking-tight" href="./index.html" target="_blank" rel="noreferrer" aria-label="Lucas, home">L<span className="text-paper">.</span></a>
-          <div className="flex items-center gap-7 text-xs font-medium text-muted sm:gap-10 sm:text-sm"><a className="transition-colors hover:text-paper" href="./index.html" target="_blank" rel="noreferrer"><DecryptText text="Home" /></a><a className="transition-colors hover:text-paper" href="./work.html" target="_blank" rel="noreferrer"><DecryptText text="Work" /></a></div>
+          <a className="font-display text-lg font-semibold tracking-tight" href="./index.html" aria-label="Lucas, home">L<span className="text-paper">.</span></a>
+          <div className="flex items-center gap-7 text-xs font-medium text-muted sm:gap-10 sm:text-sm"><a className="transition-colors hover:text-paper" href="./index.html"><DecryptText text="Home" /></a><a className="transition-colors hover:text-paper" href="./work.html"><DecryptText text="Work" /></a></div>
         </nav>
       </header>
       <main>
@@ -183,7 +183,7 @@ export default function App() {
           <div className="relative z-[1] mx-auto w-full max-w-7xl">
             <p className="mb-8 flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.24em] text-muted sm:text-xs"><span className="h-px w-8 bg-muted" />Personal portfolio <span className="text-muted">·</span> Software engineering</p>
             <h1 className="font-display text-[clamp(5.5rem,17vw,14rem)] font-medium leading-[0.78] tracking-[-0.09em]">Lucas<span className="text-acid">.</span></h1>
-            <div className="mt-12 grid max-w-3xl gap-5 sm:mt-16 sm:grid-cols-[1fr_auto] sm:items-end"><p className="max-w-2xl text-xl leading-relaxed tracking-[-0.035em] text-paper/80 sm:text-2xl lg:text-3xl">Software engineer inspired by <span className="text-muted">abstract forms, clear thinking, and the details that make technology feel human.</span></p><a href="./work.html" target="_blank" rel="noreferrer" className="group mt-3 inline-flex w-fit items-center gap-3 rounded-full border border-white/15 px-5 py-3 text-sm text-paper transition hover:border-white/30 hover:text-paper sm:mt-0">Explore work <span className="transition-transform group-hover:translate-y-1"><svg aria-hidden="true" viewBox="0 0 16 16" fill="none" className="h-4 w-4"><path d="M8 2.5v11m0 0 4-4m-4 4-4-4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" /></svg></span></a></div>
+            <div className="mt-12 grid max-w-3xl gap-5 sm:mt-16 sm:grid-cols-[1fr_auto] sm:items-end"><p className="max-w-2xl text-xl leading-relaxed tracking-[-0.035em] text-paper/80 sm:text-2xl lg:text-3xl">Software engineer inspired by <span className="text-muted">abstract forms, clear thinking, and the details that make technology feel human.</span></p><a href="./work.html" className="group mt-3 inline-flex w-fit items-center gap-3 rounded-full border border-white/15 px-5 py-3 text-sm text-paper transition hover:border-white/30 hover:text-paper sm:mt-0">Explore work <span className="transition-transform group-hover:translate-y-1"><svg aria-hidden="true" viewBox="0 0 16 16" fill="none" className="h-4 w-4"><path d="M8 2.5v11m0 0 4-4m-4 4-4-4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" /></svg></span></a></div>
           </div><div className="absolute bottom-0 left-6 right-6 h-px bg-white/10 sm:left-10 sm:right-10 lg:left-12 lg:right-12" />
         </section>
         <section id="experience" className="border-y border-white/[0.08] bg-[#111311] px-6 py-24 sm:px-10 sm:py-28 lg:px-12">
