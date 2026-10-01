@@ -1,6 +1,6 @@
-# Lucas Portfolio
+# Lucas Correa — Portfolio
 
-A minimal personal portfolio built with TypeScript and Vite, ready to deploy to GitHub Pages.
+A personal portfolio built with React, TypeScript, Vite, and Tailwind CSS. The Home page features an introduction and experience section; the separate Work page showcases selected projects.
 
 ## Development
 
@@ -16,4 +16,4 @@ npm run build
 npm run preview
 ```
 
-Push to the `main` or `master` branch to build and deploy through GitHub Actions. In the repository settings, set **Pages → Build and deployment → Source** to **GitHub Actions**.
+The site is configured for GitHub Pages deployment through `.github/workflows/deploy.yml`. Replace the experience and project templates in `src/App.tsx` with your details.
