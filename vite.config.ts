@@ -15,9 +15,9 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(root, "index.html"),
-        work: resolve(root, "work.html"),
-        project01: resolve(root, "project-01.html"),
-        project02: resolve(root, "project-02.html"),
+        work: resolve(root, "work/index.html"),
+        project01: resolve(root, "project-01/index.html"),
+        project02: resolve(root, "project-02/index.html"),
       },
     },
   },

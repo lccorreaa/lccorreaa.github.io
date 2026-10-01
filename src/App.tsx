@@ -1,5 +1,5 @@
 import "./style.css";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { type MouseEvent, useCallback, useEffect, useRef, useState } from "react";
 
 const projects = [
   { id: "project-01", number: "01", accent: "violet" },
@@ -76,7 +76,7 @@ function ProjectOverview({ project }: { project: (typeof projects)[number] }) {
   const [activation, setActivation] = useState(0);
 
   return (
-    <a id={project.id} href={`./project-${project.number}.html`} aria-label={`Open the details page for Project ${project.number}`} onMouseEnter={() => setActivation((value) => value + 1)} className="group scroll-mt-8 flex min-h-[420px] flex-col justify-between rounded-2xl border border-white/[0.08] bg-[#111311] p-7 transition-transform duration-150 hover:scale-[1.01] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-paper sm:min-h-[460px] sm:p-10 lg:p-12">
+    <a id={project.id} href={`${import.meta.env.BASE_URL}project-${project.number}/`} aria-label={`Open the details page for Project ${project.number}`} onMouseEnter={() => setActivation((value) => value + 1)} className="group scroll-mt-8 flex min-h-[420px] flex-col justify-between rounded-2xl border border-white/[0.08] bg-[#111311] p-7 transition-transform duration-150 hover:scale-[1.01] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-paper sm:min-h-[460px] sm:p-10 lg:p-12">
       <p className="section-label">Project overview</p>
       <div className="mt-16 grid gap-8 sm:grid-cols-[1fr_1.2fr] sm:items-end">
         <div><p className="text-xs uppercase tracking-[0.18em] text-muted"><DecryptText text={`Project ${project.number}`} trigger={activation} /></p><h2 className="mt-4 font-display text-3xl font-bold tracking-[-0.05em] sm:text-5xl">Project title</h2></div>
@@ -84,6 +84,18 @@ function ProjectOverview({ project }: { project: (typeof projects)[number] }) {
       </div>
       <span className="mt-8 flex items-center justify-end gap-2 text-xs text-muted transition-colors group-hover:text-paper">Open project details <ArrowIcon /></span>
     </a>
+  );
+}
+
+function ProjectDetailsPage({ number }: { number: string }) {
+  return (
+    <section className="flex min-h-[calc(100vh-80px)] items-center px-6 py-28 sm:px-10 lg:px-12">
+      <div className="mx-auto w-full max-w-7xl">
+        <p className="section-label">Project {number}</p>
+        <h1 className="mt-6 max-w-4xl font-display text-5xl font-medium tracking-[-0.06em] sm:text-7xl">Project details coming soon.</h1>
+        <a href={`${import.meta.env.BASE_URL}work/`} className="mt-10 inline-flex items-center gap-2 text-sm text-muted transition-colors hover:text-paper">← Back to work</a>
+      </div>
+    </section>
   );
 }
 
@@ -100,9 +112,45 @@ function AbstractGraphic() {
 }
 
 export default function App() {
-  const isWorkPage = window.location.pathname.endsWith("work.html");
+  const [pathname, setPathname] = useState(() => window.location.pathname);
+  const isWorkPage = pathname.endsWith("/work") || pathname.endsWith("/work/") || pathname.endsWith("/work/index.html");
+  const projectPageNumber = pathname.match(/\/project-(01|02)(?:\/|$)/)?.[1];
   const cursorRef = useRef<HTMLDivElement>(null);
   const starfieldRef = useRef<HTMLDivElement>(null);
+
+  const handleInternalNavigation = useCallback((event: MouseEvent<HTMLDivElement>) => {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    const link = target.closest<HTMLAnchorElement>("a[href]");
+    if (!link || link.target || link.hasAttribute("download")) return;
+
+    const nextUrl = new URL(link.href, window.location.href);
+    const currentUrl = new URL(window.location.href);
+    if (nextUrl.origin !== currentUrl.origin) return;
+    const normalizedNextPath = nextUrl.pathname.replace(/\/+$/, "");
+    const normalizedCurrentPath = currentUrl.pathname.replace(/\/+$/, "");
+    const samePage = normalizedNextPath === normalizedCurrentPath && nextUrl.search === currentUrl.search;
+    if (samePage) {
+      if (nextUrl.hash && nextUrl.hash !== currentUrl.hash) return;
+      event.preventDefault();
+      return;
+    }
+
+    event.preventDefault();
+    window.history.pushState({}, "", `${nextUrl.pathname}${nextUrl.search}${nextUrl.hash}`);
+    setPathname(nextUrl.pathname);
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      setPathname(window.location.pathname);
+      window.scrollTo(0, 0);
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
 
   useEffect(() => {
     let frameId: number | null = null;
@@ -143,7 +191,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-ink text-paper">
+    <div className="relative min-h-screen overflow-hidden bg-ink text-paper" onClick={handleInternalNavigation}>
       <div ref={cursorRef} className="cursor-dot" aria-hidden="true" />
       <div ref={starfieldRef} className="starfield" aria-hidden="true">
         <span className="star-dot star-one" />
@@ -169,21 +217,22 @@ export default function App() {
         <span className="star-dot star-twenty-one" />
         <span className="star-dot star-twenty-two" />
       </div>
-      <div className="relative z-10">
+      <div key={pathname} className="route-content relative z-10">
       <header className="absolute inset-x-0 top-0 z-10">
         <nav aria-label="Main navigation" className="mx-auto flex max-w-7xl items-center justify-between px-6 py-7 sm:px-10 lg:px-12">
-          <a className="font-display text-lg font-semibold tracking-tight" href="./index.html" aria-label="Lucas, home">L<span className="text-paper">.</span></a>
-          <div className="flex items-center gap-7 text-xs font-medium text-muted sm:gap-10 sm:text-sm"><a className="transition-colors hover:text-paper" href="./index.html"><DecryptText text="Home" /></a><a className="transition-colors hover:text-paper" href="./work.html"><DecryptText text="Work" /></a></div>
+          <a className="font-display text-lg font-semibold tracking-tight" href={import.meta.env.BASE_URL} aria-label="Lucas, home">L<span className="text-paper">.</span></a>
+          <div className="flex items-center gap-7 text-xs font-medium text-muted sm:gap-10 sm:text-sm"><a className="nav-link transition-colors hover:text-paper" href={import.meta.env.BASE_URL}><DecryptText text="Home" /></a><a className="nav-link transition-colors hover:text-paper" href={`${import.meta.env.BASE_URL}work/`}><DecryptText text="Work" /></a></div>
         </nav>
       </header>
       <main>
+        {projectPageNumber ? <ProjectDetailsPage number={projectPageNumber} /> : <>
         {!isWorkPage && <>
         <section id="home" className="relative flex min-h-[740px] items-center px-6 pb-28 pt-32 sm:px-10 lg:min-h-screen lg:px-12">
           <div className="absolute inset-0 -z-0 overflow-hidden"><AbstractGraphic /></div>
           <div className="relative z-[1] mx-auto w-full max-w-7xl">
             <p className="mb-8 flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.24em] text-muted sm:text-xs"><span className="h-px w-8 bg-muted" />Personal portfolio <span className="text-muted">·</span> Software engineering</p>
             <h1 className="font-display text-[clamp(5.5rem,17vw,14rem)] font-medium leading-[0.78] tracking-[-0.09em]">Lucas<span className="text-acid">.</span></h1>
-            <div className="mt-12 grid max-w-3xl gap-5 sm:mt-16 sm:grid-cols-[1fr_auto] sm:items-end"><p className="max-w-2xl text-xl leading-relaxed tracking-[-0.035em] text-paper/80 sm:text-2xl lg:text-3xl">Software engineer inspired by <span className="text-muted">abstract forms, clear thinking, and the details that make technology feel human.</span></p><a href="./work.html" className="group mt-3 inline-flex w-fit items-center gap-3 rounded-full border border-white/15 px-5 py-3 text-sm text-paper transition hover:border-white/30 hover:text-paper sm:mt-0">Explore work <span className="transition-transform group-hover:translate-y-1"><svg aria-hidden="true" viewBox="0 0 16 16" fill="none" className="h-4 w-4"><path d="M8 2.5v11m0 0 4-4m-4 4-4-4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" /></svg></span></a></div>
+            <div className="mt-12 grid max-w-3xl gap-5 sm:mt-16 sm:grid-cols-[1fr_auto] sm:items-end"><p className="max-w-2xl text-xl leading-relaxed tracking-[-0.035em] text-paper/80 sm:text-2xl lg:text-3xl">Software engineer inspired by <span className="text-muted">abstract forms, clear thinking, and the details that make technology feel human.</span></p><a href={`${import.meta.env.BASE_URL}work/`} className="group mt-3 inline-flex w-fit items-center gap-3 rounded-full border border-white/15 px-5 py-3 text-sm text-paper transition hover:border-white/30 hover:text-paper sm:mt-0">Explore work <span className="transition-transform group-hover:translate-y-1"><svg aria-hidden="true" viewBox="0 0 16 16" fill="none" className="h-4 w-4"><path d="M8 2.5v11m0 0 4-4m-4 4-4-4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" /></svg></span></a></div>
           </div><div className="absolute bottom-0 left-6 right-6 h-px bg-white/10 sm:left-10 sm:right-10 lg:left-12 lg:right-12" />
         </section>
         <section id="experience" className="border-y border-white/[0.08] bg-[#111311] px-6 py-24 sm:px-10 sm:py-28 lg:px-12">
@@ -221,8 +270,9 @@ export default function App() {
           </div>
         </section>
         </>}
+        </>}
       </main>
-      {!isWorkPage && <footer id="contact" className="px-6 pb-5 sm:px-10 lg:px-12"><div className="mx-auto grid max-w-7xl grid-cols-2 items-center gap-x-4 gap-y-3 border-t border-white/10 pt-4 text-center sm:grid-cols-[1fr_auto_auto] sm:gap-5 sm:pt-5"><span className="col-start-1 row-start-2 justify-self-start text-[11px] text-muted sm:row-start-1">© {new Date().getFullYear()} Lucas Correa</span><div className="col-span-2 row-start-1 flex items-center justify-center gap-4 text-xs sm:col-span-1 sm:col-start-2 sm:row-start-1 sm:justify-end sm:gap-5 sm:text-sm"><span className="break-all">lucas.c.correa1@gmail.com</span><span>999-999-9999</span></div><a href="#home" className="col-start-2 row-start-2 justify-self-end text-[11px] text-muted transition hover:text-paper sm:col-start-3 sm:row-start-1">Back to top ↑</a></div></footer>}
+      {!isWorkPage && !projectPageNumber && <footer id="contact" className="px-6 pb-5 sm:px-10 lg:px-12"><div className="mx-auto grid max-w-7xl grid-cols-2 items-center gap-x-4 gap-y-3 border-t border-white/10 pt-4 text-center sm:grid-cols-[1fr_auto_auto] sm:gap-5 sm:pt-5"><span className="col-start-1 row-start-2 justify-self-start text-[11px] text-muted sm:row-start-1">© {new Date().getFullYear()} Lucas Correa</span><div className="col-span-2 row-start-1 flex items-center justify-center gap-4 text-xs sm:col-span-1 sm:col-start-2 sm:row-start-1 sm:justify-end sm:gap-5 sm:text-sm"><span className="break-all">lucas.c.correa1@gmail.com</span><span>999-999-9999</span></div><a href="#home" className="col-start-2 row-start-2 justify-self-end text-[11px] text-muted transition hover:text-paper sm:col-start-3 sm:row-start-1">Back to top ↑</a></div></footer>}
       </div>
     </div>
   );
