@@ -2,8 +2,8 @@ import "./style.css";
 import { type MouseEvent, useCallback, useEffect, useRef, useState } from "react";
 
 const projects = [
-  { id: "project-01", number: "01", accent: "violet" },
-  { id: "project-02", number: "02", accent: "blue" },
+  { id: "phishing-detection", number: "01", accent: "violet", title: "Phishing Detection", description: "A text-classification baseline that uses TF-IDF and logistic regression to distinguish malicious email from legitimate messages.", detail: "Python · scikit-learn · CEAS 2008" },
+  { id: "project-02", number: "02", accent: "blue", title: "Project 02", description: "A short overview of this project will go here: what it does, the problem it solves, and the ideas behind its design and implementation.", detail: "Add the project’s tools, role, and key outcomes here." },
 ];
 const projectSlots = Array.from({ length: 3 }, (_, index) => ({
   slot: index + 1,
@@ -76,26 +76,37 @@ function ProjectOverview({ project }: { project: (typeof projects)[number] }) {
   const [activation, setActivation] = useState(0);
 
   return (
-    <a id={project.id} href={`${import.meta.env.BASE_URL}project-${project.number}/`} aria-label={`Open the details page for Project ${project.number}`} onMouseEnter={() => setActivation((value) => value + 1)} className="group scroll-mt-8 flex min-h-[420px] flex-col justify-between rounded-2xl border border-white/[0.08] bg-[#111311] p-7 transition-transform duration-150 hover:scale-[1.01] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-paper sm:min-h-[460px] sm:p-10 lg:p-12">
+    <a id={project.id} href={`${import.meta.env.BASE_URL}${project.id === "phishing-detection" ? "phishing-detection" : `project-${project.number}`}/`} aria-label={`Open the details page for ${project.title}`} onMouseEnter={() => setActivation((value) => value + 1)} className="group scroll-mt-8 flex min-h-[420px] flex-col justify-between rounded-2xl border border-white/[0.08] bg-[#111311] p-7 transition-transform duration-150 hover:scale-[1.01] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-paper sm:min-h-[460px] sm:p-10 lg:p-12">
       <p className="section-label">Project overview</p>
       <div className="mt-16 grid gap-8 sm:grid-cols-[1fr_1.2fr] sm:items-end">
-        <div><p className="text-xs uppercase tracking-[0.18em] text-muted"><DecryptText text={`Project ${project.number}`} trigger={activation} /></p><h2 className="mt-4 font-display text-3xl font-bold tracking-[-0.05em] sm:text-5xl">Project title</h2></div>
-        <div className="max-w-xl"><p className="text-base leading-7 text-paper/75 sm:text-lg sm:leading-8">A short overview of this project will go here: what it does, the problem it solves, and the ideas behind its design and implementation.</p><p className="mt-5 text-sm leading-6 text-muted">Add the project’s tools, role, and key outcomes here.</p></div>
+        <div><p className="text-xs uppercase tracking-[0.18em] text-muted"><DecryptText text={`Project ${project.number}`} trigger={activation} /></p><h2 className="mt-4 font-display text-3xl font-bold tracking-[-0.05em] sm:text-5xl">{project.title}</h2></div>
+        <div className="max-w-xl"><p className="text-base leading-7 text-paper/75 sm:text-lg sm:leading-8">{project.description}</p><p className="mt-5 text-sm leading-6 text-muted">{project.detail}</p></div>
       </div>
       <span className="mt-8 flex items-center justify-end gap-2 text-xs text-muted transition-colors group-hover:text-paper">Open project details <ArrowIcon /></span>
     </a>
   );
 }
 
-function ProjectDetailsPage({ number }: { number: string }) {
+function PhishingDetectionPage() {
   return (
-    <section className="flex min-h-[calc(100vh-80px)] items-center px-6 py-28 sm:px-10 lg:px-12">
+    <article className="px-6 pb-24 pt-28 sm:px-10 sm:pb-32 sm:pt-36 lg:px-12">
       <div className="mx-auto w-full max-w-7xl">
-        <p className="section-label">Project {number}</p>
-        <h1 className="mt-6 max-w-4xl font-display text-5xl font-medium tracking-[-0.06em] sm:text-7xl">Project details coming soon.</h1>
-        <a href={`${import.meta.env.BASE_URL}work/`} className="mt-10 inline-flex items-center gap-2 text-sm text-muted transition-colors hover:text-paper">← Back to work</a>
+        <p className="section-label">Project 01 · Email security · Text classification</p>
+        <h1 className="mt-6 max-w-5xl font-display text-5xl font-medium tracking-[-0.06em] sm:text-7xl">Phishing Detection</h1>
+        <p className="mt-6 max-w-3xl text-lg leading-8 text-paper/75 sm:text-xl">Can email body text reveal a threat? This experiment uses TF-IDF features and logistic regression to classify messages as malicious or legitimate.</p>
+        <div className="mt-10 grid gap-3 sm:grid-cols-3">{[["39,154", "labeled CEAS 2008 emails"], ["80 / 20", "stratified train / test split"], ["TF-IDF + LR", "word and phrase features"]].map(([value, label]) => <div key={label} className="rounded-xl border border-white/[0.08] bg-panel p-5"><strong className="block font-display text-2xl tracking-[-0.04em]">{value}</strong><span className="mt-1 block text-sm text-muted">{label}</span></div>)}</div>
+        <div className="mt-16 grid gap-14 border-t border-white/10 pt-12 lg:grid-cols-[1.25fr_.75fr]">
+          <div className="space-y-12">
+            <section><h2 className="font-display text-3xl font-semibold tracking-[-0.04em]">Approach</h2><p className="mt-4 max-w-3xl leading-7 text-paper/75">The goal was to build a clear, reproducible baseline using message text alone. TF-IDF represents how informative words and short phrases are across the dataset; logistic regression learns which patterns are associated with each label. This approach is lightweight, works well with sparse text features, and gives inspectable feature weights—a useful starting point before trying more complex models.</p></section>
+            <section><h2 className="font-display text-3xl font-semibold tracking-[-0.04em]">Method</h2><ol className="mt-5 space-y-4 text-paper/75">{[["01", "Prepare", "Drop unlabeled rows, strip HTML from each body, and normalize whitespace."], ["02", "Split", "Reserve 20% for evaluation with a fixed random seed (42) and stratify by label."], ["03", "Represent", "Fit lowercase unigram and bigram TF-IDF features on training text only; cap vocabulary at 100,000 terms, require terms in at least two messages, and apply sublinear term frequency."], ["04", "Classify", "Fit logistic regression and predict labels for the held-out messages."]].map(([n, title, text]) => <li key={n} className="grid gap-1 sm:grid-cols-[52px_1fr]"><span className="text-xs font-semibold tracking-[.16em] text-acid">{n}</span><div><h3 className="font-medium text-paper">{title}</h3><p className="mt-1 text-sm leading-6 text-muted">{text}</p></div></li>)}</ol></section>
+            <section><h2 className="font-display text-3xl font-semibold tracking-[-0.04em]">Results</h2><p className="mt-4 max-w-3xl leading-7 text-paper/75">The repository’s training script reports held-out precision, recall, F1, accuracy, and a confusion matrix, but no run output is saved with the project. The fitted model file does not preserve those evaluation figures, so quantitative performance cannot be verified from the available artifacts. The experiment establishes a repeatable evaluation setup; its measured detection performance remains to be recorded.</p><div className="mt-5 rounded-xl border border-white/[0.08] bg-panel p-5"><p className="text-sm leading-6 text-muted">To complete the result, rerun <code className="text-paper/80">src/tfidf_training.py</code> and record the held-out metrics, especially malicious-class recall and false negatives.</p></div></section>
+            <section><h2 className="font-display text-3xl font-semibold tracking-[-0.04em]">Limits and next steps</h2><p className="mt-4 max-w-3xl leading-7 text-paper/75">This is a body-text-only baseline evaluated on a 2008 dataset. It does not inspect links, senders, attachments, or authentication signals, and a random split may put related messages in both sets. Next steps are to inspect false positives and missed threats, deduplicate related emails, and evaluate on newer data with a time-based split.</p></section>
+          </div>
+          <aside className="h-fit rounded-xl border border-white/[0.08] bg-panel p-6"><p className="section-label">Experiment details</p><dl className="mt-5 space-y-4 text-sm"><div><dt className="text-muted">Dataset</dt><dd className="mt-1 text-paper/80">CEAS 2008 email dataset</dd></div><div><dt className="text-muted">Labels</dt><dd className="mt-1 text-paper/80">0 = legitimate · 1 = malicious</dd></div><div><dt className="text-muted">Class balance</dt><dd className="mt-1 text-paper/80">17,312 legitimate · 21,842 malicious</dd></div><div><dt className="text-muted">Features</dt><dd className="mt-1 text-paper/80">Email body only; lowercase unigrams and bigrams</dd></div><div><dt className="text-muted">Stack</dt><dd className="mt-1 text-paper/80">Python · scikit-learn · TF-IDF · logistic regression</dd></div></dl></aside>
+        </div>
+        <a href={`${import.meta.env.BASE_URL}work/`} className="mt-16 inline-flex items-center gap-2 text-sm text-muted transition-colors hover:text-paper">← Back to work</a>
       </div>
-    </section>
+    </article>
   );
 }
 
@@ -114,7 +125,8 @@ function AbstractGraphic() {
 export default function App() {
   const [pathname, setPathname] = useState(() => window.location.pathname);
   const isWorkPage = pathname.endsWith("/work") || pathname.endsWith("/work/") || pathname.endsWith("/work/index.html");
-  const projectPageNumber = pathname.match(/\/project-(01|02)(?:\/|$)/)?.[1];
+  const projectPageNumber = pathname.match(/\/project-(02)(?:\/|$)/)?.[1];
+  const isPhishingDetectionPage = /\/phishing-detection(?:\/|$)/.test(pathname);
   const cursorRef = useRef<HTMLDivElement>(null);
   const starfieldRef = useRef<HTMLDivElement>(null);
 
@@ -225,7 +237,7 @@ export default function App() {
         </nav>
       </header>
       <main>
-        {projectPageNumber ? <ProjectDetailsPage number={projectPageNumber} /> : <>
+        {isPhishingDetectionPage ? <PhishingDetectionPage /> : projectPageNumber ? <section className="flex min-h-[calc(100vh-80px)] items-center px-6 py-28 sm:px-10 lg:px-12"><div className="mx-auto w-full max-w-7xl"><p className="section-label">Project {projectPageNumber}</p><h1 className="mt-6 max-w-4xl font-display text-5xl font-medium tracking-[-0.06em] sm:text-7xl">Project details coming soon.</h1><a href={`${import.meta.env.BASE_URL}work/`} className="mt-10 inline-flex items-center gap-2 text-sm text-muted transition-colors hover:text-paper">← Back to work</a></div></section> : <>
         {!isWorkPage && <>
         <section id="home" className="relative flex min-h-[740px] items-center px-6 pb-28 pt-32 sm:px-10 lg:min-h-screen lg:px-12">
           <div className="absolute inset-0 -z-0 overflow-hidden"><AbstractGraphic /></div>
@@ -250,10 +262,10 @@ export default function App() {
             <div className="mb-12 sm:mb-16"><p className="section-label">01 / Projects</p></div>
             <div className="grid gap-3 sm:grid-cols-3 sm:gap-4">
               {projectSlots.map(({ slot, project }) => project ? (
-                <a key={project.id} href={`#${project.id}`} aria-label={`Scroll to Project ${project.number} overview`} className="project-card relative flex min-h-[190px] flex-col justify-between overflow-hidden rounded-xl border border-white/[0.08] bg-panel p-5 transition-transform duration-150 hover:scale-[1.02] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-paper sm:min-h-[210px] sm:p-6">
+                <a key={project.id} href={`#${project.id}`} aria-label={`Scroll to ${project.title} overview`} className="project-card relative flex min-h-[190px] flex-col justify-between overflow-hidden rounded-xl border border-white/[0.08] bg-panel p-5 transition-transform duration-150 hover:scale-[1.02] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-paper sm:min-h-[210px] sm:p-6">
                   <div className={`project-art art-${project.accent}`} aria-hidden="true"><span /><span /><span /></div>
                   <span className="relative z-[1] text-[11px] font-medium text-muted">/{project.number}</span>
-                  <div className="relative z-[1] flex items-end justify-between"><h2 className="font-display text-lg font-bold tracking-[-0.05em] sm:text-xl">Project {project.number}</h2><span className="text-muted"><ArrowIcon /></span></div>
+                  <div className="relative z-[1] flex items-end justify-between"><h2 className="font-display text-lg font-bold tracking-[-0.05em] sm:text-xl">{project.title}</h2><span className="text-muted"><ArrowIcon /></span></div>
                 </a>
               ) : (
                 <div key={`coming-${slot}`} className="relative flex min-h-[190px] flex-col justify-between rounded-xl border border-dashed border-white/[0.08] bg-white/[0.015] p-5 text-muted/70 sm:min-h-[210px] sm:p-6">
@@ -272,7 +284,7 @@ export default function App() {
         </>}
         </>}
       </main>
-      {!isWorkPage && !projectPageNumber && <footer id="contact" className="px-6 pb-5 sm:px-10 lg:px-12"><div className="mx-auto grid max-w-7xl grid-cols-2 items-center gap-x-4 gap-y-3 border-t border-white/10 pt-4 text-center sm:grid-cols-[1fr_auto_auto] sm:gap-5 sm:pt-5"><span className="col-start-1 row-start-2 justify-self-start text-[11px] text-muted sm:row-start-1">© {new Date().getFullYear()} Lucas Correa</span><div className="col-span-2 row-start-1 flex items-center justify-center gap-4 text-xs sm:col-span-1 sm:col-start-2 sm:row-start-1 sm:justify-end sm:gap-5 sm:text-sm"><span className="break-all">lucas.c.correa1@gmail.com</span><span>999-999-9999</span></div><a href="#home" className="col-start-2 row-start-2 justify-self-end text-[11px] text-muted transition hover:text-paper sm:col-start-3 sm:row-start-1">Back to top ↑</a></div></footer>}
+      {!isWorkPage && !projectPageNumber && !isPhishingDetectionPage && <footer id="contact" className="px-6 pb-5 sm:px-10 lg:px-12"><div className="mx-auto grid max-w-7xl grid-cols-2 items-center gap-x-4 gap-y-3 border-t border-white/10 pt-4 text-center sm:grid-cols-[1fr_auto_auto] sm:gap-5 sm:pt-5"><span className="col-start-1 row-start-2 justify-self-start text-[11px] text-muted sm:row-start-1">© {new Date().getFullYear()} Lucas Correa</span><div className="col-span-2 row-start-1 flex items-center justify-center gap-4 text-xs sm:col-span-1 sm:col-start-2 sm:row-start-1 sm:justify-end sm:gap-5 sm:text-sm"><span className="break-all">lucas.c.correa1@gmail.com</span><span>999-999-9999</span></div><a href="#home" className="col-start-2 row-start-2 justify-self-end text-[11px] text-muted transition hover:text-paper sm:col-start-3 sm:row-start-1">Back to top ↑</a></div></footer>}
       </div>
     </div>
   );
