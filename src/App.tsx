@@ -5,15 +5,6 @@ const projects = [
   { id: "phishing-detection", number: "01", accent: "violet", title: "Phishing Detection", description: "A text-classification baseline that uses TF-IDF and logistic regression to distinguish malicious email from legitimate messages.", detail: "Python · scikit-learn · CEAS 2008" },
   { id: "project-02", number: "02", accent: "blue", title: "Project 02", description: "A short overview of this project will go here: what it does, the problem it solves, and the ideas behind its design and implementation.", detail: "Add the project’s tools, role, and key outcomes here." },
 ];
-const projectSlots = Array.from({ length: 3 }, (_, index) => ({
-  slot: index + 1,
-  project: projects[index],
-}));
-
-function ArrowIcon() {
-  return <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" className="h-4 w-4"><path d="M3.25 12.75 12.5 3.5M4 3.5h8.5V12" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" /></svg>;
-}
-
 const cipherCharacters = "0123456789#%XY";
 
 function DecryptText({ text, trigger }: { text: string; trigger?: number }) {
@@ -64,7 +55,7 @@ function ExperienceCard() {
   const [activation, setActivation] = useState(0);
 
   return (
-    <article onMouseEnter={() => setActivation((value) => value + 1)} className="experience-card group rounded-xl border border-white/[0.08] bg-panel p-6 transition-transform duration-150 hover:scale-[1.02]">
+    <article onMouseEnter={() => setActivation((value) => value + 1)} className="experience-card group rounded-xl border border-white/[0.08] bg-[#090909] p-6 transition-transform duration-150 hover:scale-[1.02]">
       <h2 className="font-display text-2xl font-bold tracking-[-0.04em]">Role title</h2>
       <p className="mt-2 text-sm text-muted"><DecryptText text="Organization · Dates" trigger={activation} /></p>
       <p className="mt-4 max-w-lg text-sm leading-6 text-paper/70">Add a short summary of your responsibilities, contributions, and experience here.</p>
@@ -76,13 +67,12 @@ function ProjectOverview({ project }: { project: (typeof projects)[number] }) {
   const [activation, setActivation] = useState(0);
 
   return (
-    <a id={project.id} href={`${import.meta.env.BASE_URL}${project.id === "phishing-detection" ? "phishing-detection" : `project-${project.number}`}/`} aria-label={`Open the details page for ${project.title}`} onMouseEnter={() => setActivation((value) => value + 1)} className="group scroll-mt-8 flex min-h-[420px] flex-col justify-between rounded-2xl border border-white/[0.08] bg-[#111311] p-7 transition-transform duration-150 hover:scale-[1.01] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-paper sm:min-h-[460px] sm:p-10 lg:p-12">
+    <a id={project.id} href={`${import.meta.env.BASE_URL}${project.id === "phishing-detection" ? "phishing-detection" : `project-${project.number}`}/`} aria-label={`Open the details page for ${project.title}`} onMouseEnter={() => setActivation((value) => value + 1)} className="group scroll-mt-8 flex min-h-[320px] flex-col justify-between border-b border-white/20 py-12 transition-colors duration-200 hover:border-white/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-paper sm:min-h-[360px] sm:py-16">
       <p className="section-label">Project overview</p>
-      <div className="mt-16 grid gap-8 sm:grid-cols-[1fr_1.2fr] sm:items-end">
+      <div className="mt-8 grid gap-8 sm:grid-cols-[1fr_1.2fr] sm:items-end">
         <div><p className="text-xs uppercase tracking-[0.18em] text-muted"><DecryptText text={`Project ${project.number}`} trigger={activation} /></p><h2 className="mt-4 font-display text-3xl font-bold tracking-[-0.05em] sm:text-5xl">{project.title}</h2></div>
         <div className="max-w-xl"><p className="text-base leading-7 text-paper/75 sm:text-lg sm:leading-8">{project.description}</p><p className="mt-5 text-sm leading-6 text-muted">{project.detail}</p></div>
       </div>
-      <span className="mt-8 flex items-center justify-end gap-2 text-xs text-muted transition-colors group-hover:text-paper">Open project details <ArrowIcon /></span>
     </a>
   );
 }
@@ -98,7 +88,7 @@ function PhishingDetectionPage() {
         <div className="mt-16 grid gap-14 border-t border-white/10 pt-12 lg:grid-cols-[1.25fr_.75fr]">
           <div className="space-y-12">
             <section><h2 className="font-display text-3xl font-semibold tracking-[-0.04em]">Approach</h2><p className="mt-4 max-w-3xl leading-7 text-paper/75">The goal was to build a clear, reproducible baseline using message text alone. TF-IDF represents how informative words and short phrases are across the dataset; logistic regression learns which patterns are associated with each label. This approach is lightweight, works well with sparse text features, and gives inspectable feature weights—a useful starting point before trying more complex models.</p></section>
-            <section><h2 className="font-display text-3xl font-semibold tracking-[-0.04em]">Method</h2><ol className="mt-5 space-y-4 text-paper/75">{[["01", "Prepare", "Drop unlabeled rows, strip HTML from each body, and normalize whitespace."], ["02", "Split", "Reserve 20% for evaluation with a fixed random seed (42) and stratify by label."], ["03", "Represent", "Fit lowercase unigram and bigram TF-IDF features on training text only; cap vocabulary at 100,000 terms, require terms in at least two messages, and apply sublinear term frequency."], ["04", "Classify", "Fit logistic regression and predict labels for the held-out messages."]].map(([n, title, text]) => <li key={n} className="grid gap-1 sm:grid-cols-[52px_1fr]"><span className="text-xs font-semibold tracking-[.16em] text-acid">{n}</span><div><h3 className="font-medium text-paper">{title}</h3><p className="mt-1 text-sm leading-6 text-muted">{text}</p></div></li>)}</ol></section>
+            <section><h2 className="font-display text-3xl font-semibold tracking-[-0.04em]">Method</h2><ol className="mt-5 space-y-4 text-paper/75">{[["01", "Prepare", "Drop unlabeled rows, strip HTML from each body, and normalize whitespace."], ["02", "Split", "Reserve 20% for evaluation with a fixed random seed (42) and stratify by label."], ["03", "Represent", "Fit lowercase unigram and bigram TF-IDF features on training text only; cap vocabulary at 100,000 terms, require terms in at least two messages, and apply sublinear term frequency."], ["04", "Classify", "Fit logistic regression and predict labels for the held-out messages."]].map(([n, title, text]) => <li key={n} className="grid gap-1 sm:grid-cols-[52px_1fr]"><span className="text-xs font-semibold tracking-[.16em] text-accent">{n}</span><div><h3 className="font-medium text-paper">{title}</h3><p className="mt-1 text-sm leading-6 text-muted">{text}</p></div></li>)}</ol></section>
             <section><h2 className="font-display text-3xl font-semibold tracking-[-0.04em]">Results</h2><p className="mt-4 max-w-3xl leading-7 text-paper/75">The repository’s training script reports held-out precision, recall, F1, accuracy, and a confusion matrix, but no run output is saved with the project. The fitted model file does not preserve those evaluation figures, so quantitative performance cannot be verified from the available artifacts. The experiment establishes a repeatable evaluation setup; its measured detection performance remains to be recorded.</p><div className="mt-5 rounded-xl border border-white/[0.08] bg-panel p-5"><p className="text-sm leading-6 text-muted">To complete the result, rerun <code className="text-paper/80">src/tfidf_training.py</code> and record the held-out metrics, especially malicious-class recall and false negatives.</p></div></section>
             <section><h2 className="font-display text-3xl font-semibold tracking-[-0.04em]">Limits and next steps</h2><p className="mt-4 max-w-3xl leading-7 text-paper/75">This is a body-text-only baseline evaluated on a 2008 dataset. It does not inspect links, senders, attachments, or authentication signals, and a random split may put related messages in both sets. Next steps are to inspect false positives and missed threats, deduplicate related emails, and evaluate on newer data with a time-based split.</p></section>
           </div>
@@ -117,7 +107,7 @@ function AbstractGraphic() {
       <div className="orbit absolute right-[8%] top-[18%] h-[440px] w-[440px] rounded-full" />
       <div className="orbit orbit-two absolute right-[16%] top-[27%] h-[280px] w-[280px] rounded-full" />
       <div className="orbit orbit-three absolute right-[24%] top-[35%] h-[120px] w-[120px] rounded-full" />
-      <span className="absolute right-[16%] top-[27%] h-2 w-2 rounded-full bg-acid shadow-[0_0_22px_5px_rgba(198,255,86,0.4)]" />
+      <span className="absolute right-[16%] top-[27%] h-2 w-2 rounded-full bg-accent shadow-[0_0_22px_5px_rgba(111,156,255,0.4)]" />
     </div>
   );
 }
@@ -127,6 +117,7 @@ export default function App() {
   const isWorkPage = pathname.endsWith("/work") || pathname.endsWith("/work/") || pathname.endsWith("/work/index.html");
   const projectPageNumber = pathname.match(/\/project-(02)(?:\/|$)/)?.[1];
   const isPhishingDetectionPage = /\/phishing-detection(?:\/|$)/.test(pathname);
+  const [activeProjectIndex, setActiveProjectIndex] = useState(0);
   const cursorRef = useRef<HTMLDivElement>(null);
   const starfieldRef = useRef<HTMLDivElement>(null);
 
@@ -163,6 +154,23 @@ export default function App() {
     window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);
   }, []);
+
+  useEffect(() => {
+    if (!isWorkPage || !("IntersectionObserver" in window)) return;
+    const projectElements = projects
+      .map((project, index) => ({ element: document.getElementById(project.id), index }))
+      .filter((item): item is { element: HTMLElement; index: number } => item.element instanceof HTMLElement);
+    const observer = new IntersectionObserver(() => {
+      const viewportCenter = window.innerHeight / 2;
+      const visible = projectElements
+        .map(({ element, index }) => ({ index, rect: element.getBoundingClientRect() }))
+        .filter(({ rect }) => rect.bottom > 0 && rect.top < window.innerHeight)
+        .sort((a, b) => Math.abs((a.rect.top + a.rect.bottom) / 2 - viewportCenter) - Math.abs((b.rect.top + b.rect.bottom) / 2 - viewportCenter));
+      if (visible[0]) setActiveProjectIndex(visible[0].index);
+    }, { threshold: [0, 0.25, 0.5, 0.75, 1] });
+    projectElements.forEach(({ element }) => observer.observe(element));
+    return () => observer.disconnect();
+  }, [isWorkPage]);
 
   useEffect(() => {
     let frameId: number | null = null;
@@ -216,18 +224,6 @@ export default function App() {
         <span className="star-dot star-eight" />
         <span className="star-dot star-nine" />
         <span className="star-dot star-ten" />
-        <span className="star-dot star-eleven" />
-        <span className="star-dot star-twelve" />
-        <span className="star-dot star-thirteen" />
-        <span className="star-dot star-fourteen" />
-        <span className="star-dot star-fifteen" />
-        <span className="star-dot star-sixteen" />
-        <span className="star-dot star-seventeen" />
-        <span className="star-dot star-eighteen" />
-        <span className="star-dot star-nineteen" />
-        <span className="star-dot star-twenty" />
-        <span className="star-dot star-twenty-one" />
-        <span className="star-dot star-twenty-two" />
       </div>
       <div key={pathname} className="route-content relative z-10">
       <header className="absolute inset-x-0 top-0 z-10">
@@ -242,43 +238,61 @@ export default function App() {
         <section id="home" className="relative flex min-h-[740px] items-center px-6 pb-28 pt-32 sm:px-10 lg:min-h-screen lg:px-12">
           <div className="absolute inset-0 -z-0 overflow-hidden"><AbstractGraphic /></div>
           <div className="relative z-[1] mx-auto w-full max-w-7xl">
-            <p className="mb-8 flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.24em] text-muted sm:text-xs"><span className="h-px w-8 bg-muted" />Personal portfolio <span className="text-muted">·</span> Software engineering</p>
-            <h1 className="font-display text-[clamp(5.5rem,17vw,14rem)] font-medium leading-[0.78] tracking-[-0.09em]">Lucas<span className="text-acid">.</span></h1>
-            <div className="mt-12 grid max-w-3xl gap-5 sm:mt-16 sm:grid-cols-[1fr_auto] sm:items-end"><p className="max-w-2xl text-xl leading-relaxed tracking-[-0.035em] text-paper/80 sm:text-2xl lg:text-3xl">Software engineer inspired by <span className="text-muted">abstract forms, clear thinking, and the details that make technology feel human.</span></p><a href={`${import.meta.env.BASE_URL}work/`} className="group mt-3 inline-flex w-fit items-center gap-3 rounded-full border border-white/15 px-5 py-3 text-sm text-paper transition hover:border-white/30 hover:text-paper sm:mt-0">Explore work <span className="transition-transform group-hover:translate-y-1"><svg aria-hidden="true" viewBox="0 0 16 16" fill="none" className="h-4 w-4"><path d="M8 2.5v11m0 0 4-4m-4 4-4-4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" /></svg></span></a></div>
+            <h1 className="font-display text-[clamp(5.5rem,17vw,14rem)] font-medium leading-[0.78] tracking-[-0.09em]">Lucas</h1>
+            <div className="mt-12 max-w-3xl sm:mt-16">
+              <p className="max-w-2xl text-xl leading-relaxed tracking-[-0.035em] text-paper/80 sm:text-2xl lg:text-3xl">I design and build backend systems, data pipelines and models to analyze probabilistic systems with real world applications. Interested in Machine Learning and Security currently.</p>
+              <a href={`${import.meta.env.BASE_URL}work/`} className="group mt-8 inline-flex w-fit items-center gap-3 rounded-full border border-white/15 px-5 py-3 text-sm text-paper transition hover:border-white/30 hover:text-paper">Explore work <span className="transition-transform group-hover:translate-x-1"><svg aria-hidden="true" viewBox="0 0 16 16" fill="none" className="h-4 w-4"><path d="M2.5 8h11m0 0-4-4m4 4-4 4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" /></svg></span></a>
+            </div>
           </div><div className="absolute bottom-0 left-6 right-6 h-px bg-white/10 sm:left-10 sm:right-10 lg:left-12 lg:right-12" />
         </section>
-        <section id="experience" className="border-y border-white/[0.08] bg-[#111311] px-6 py-24 sm:px-10 sm:py-28 lg:px-12">
+        <section id="about" className="px-6 py-20 sm:px-10 sm:py-24 lg:px-12">
+          <div className="mx-auto grid max-w-7xl gap-10 border-b border-white/10 pb-8 md:grid-cols-[1.2fr_0.8fr] md:items-end">
+            <div>
+              <p className="section-label">About</p>
+              <p className="mt-5 max-w-2xl text-base leading-7 text-paper/75 sm:text-lg sm:leading-8">A short introduction about my background, interests, and what I’m currently exploring will go here.</p>
+            </div>
+            <dl className="grid grid-cols-2 gap-5">
+              <div>
+                <dt className="section-label">Location</dt>
+                <dd className="mt-3 text-sm text-paper/80 sm:text-base">North Carolina</dd>
+              </div>
+              <div>
+                <dt className="section-label">Education</dt>
+                <dd className="mt-3 text-sm text-paper/80 sm:text-base">B.S. Senior @ NC State</dd>
+              </div>
+            </dl>
+          </div>
+        </section>
+        <section id="experience" className="border-y border-white/[0.08] bg-ink px-6 py-24 sm:px-10 sm:py-28 lg:px-12">
           <div className="mx-auto max-w-7xl">
             <p className="section-label">Experience</p>
-            <div className="mt-8 grid gap-4 border-t border-white/10 pt-8 md:grid-cols-2">
+            <div className="mt-8 grid gap-4 border-t border-white/10 pt-8">
               {[0, 1].map((role) => <ExperienceCard key={role} />)}
+            </div>
+            <div className="mt-14 border-t border-white/10 pt-8">
+              <p className="section-label">Skills</p>
+              <ul className="mt-5 flex flex-wrap gap-2" aria-label="Skills">
+                {["TypeScript", "React", "Tailwind CSS", "Git"].map((skill) => <li key={skill} className="rounded-full border border-white/10 px-4 py-2 text-sm text-paper/75">{skill}</li>)}
+              </ul>
             </div>
           </div>
         </section>
         </>}
         {isWorkPage && <>
-        <section id="work" className="scroll-mt-12 px-6 py-28 sm:px-10 sm:py-36 lg:px-12">
-          <div className="mx-auto max-w-7xl">
-            <div className="mb-12 sm:mb-16"><p className="section-label">01 / Projects</p></div>
-            <div className="grid gap-3 sm:grid-cols-3 sm:gap-4">
-              {projectSlots.map(({ slot, project }) => project ? (
-                <a key={project.id} href={`#${project.id}`} aria-label={`Scroll to ${project.title} overview`} className="project-card relative flex min-h-[190px] flex-col justify-between overflow-hidden rounded-xl border border-white/[0.08] bg-panel p-5 transition-transform duration-150 hover:scale-[1.02] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-paper sm:min-h-[210px] sm:p-6">
-                  <div className={`project-art art-${project.accent}`} aria-hidden="true"><span /><span /><span /></div>
-                  <span className="relative z-[1] text-[11px] font-medium text-muted">/{project.number}</span>
-                  <div className="relative z-[1] flex items-end justify-between"><h2 className="font-display text-lg font-bold tracking-[-0.05em] sm:text-xl">{project.title}</h2><span className="text-muted"><ArrowIcon /></span></div>
-                </a>
-              ) : (
-                <div key={`coming-${slot}`} className="relative flex min-h-[190px] flex-col justify-between rounded-xl border border-dashed border-white/[0.08] bg-white/[0.015] p-5 text-muted/70 sm:min-h-[210px] sm:p-6">
-                  <span className="text-[11px] font-medium">/{String(slot).padStart(2, "0")}</span>
-                  <span className="flex items-center justify-between text-xs"><span>Coming soon</span><span aria-hidden="true" className="text-base">+</span></span>
-                </div>
-              ))}
+        <section aria-label="Project details" className="px-6 pb-24 pt-28 sm:px-10 sm:pb-32 sm:pt-36 lg:px-12">
+          <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[minmax(0,1fr)_10rem] lg:gap-12">
+            <div className="mx-auto w-full max-w-5xl">
+              {projects.map((project) => <ProjectOverview key={project.id} project={project} />)}
             </div>
-          </div>
-        </section>
-        <section aria-label="Project details" className="px-6 pb-24 sm:px-10 sm:pb-32 lg:px-12">
-          <div className="mx-auto max-w-7xl space-y-4">
-            {projects.map((project) => <ProjectOverview key={project.id} project={project} />)}
+            <aside aria-label="Project index" className="sticky top-[42vh] hidden h-fit lg:block">
+              <p className="section-label">Projects</p>
+              <nav className="mt-4 flex flex-col" aria-label="Project list">
+                {projects.map((project, index) => {
+                  const isCurrent = index === activeProjectIndex;
+                  return <a key={project.id} href={`#${project.id}`} aria-current={isCurrent ? "location" : undefined} className={`flex gap-3 border-l py-3 pl-3 transition-colors ${isCurrent ? "border-paper text-paper" : "border-white/10 text-muted hover:border-white/40 hover:text-paper"}`}><span className="text-[10px] tracking-[0.12em]">{project.number}</span><span className="text-xs leading-5">{project.title}</span></a>;
+                })}
+              </nav>
+            </aside>
           </div>
         </section>
         </>}
