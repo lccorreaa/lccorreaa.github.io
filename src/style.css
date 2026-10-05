@@ -4,7 +4,7 @@
 
 :root { font-family: "Aptos", "Segoe UI Variable", "Segoe UI", ui-sans-serif, system-ui, sans-serif; color-scheme: dark; font-synthesis: none; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; scroll-behavior: smooth; }
 body { min-width: 320px; margin: 0; }
-::selection { background: #c8d9f8; color: #080d17; }
+::selection { background: #c8d9f8; color: #05070c; }
 .font-display { font-family: "Aptos Display", "Aptos", "Segoe UI Variable", "Segoe UI", ui-sans-serif, system-ui, sans-serif; }
 .section-label { color: #9aa8bf; font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; }
 .nav-link { position: relative; display: inline-block; }

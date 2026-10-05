@@ -3,7 +3,7 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
-      colors: { ink: "#080d17", paper: "#eaf0fa", muted: "#8996ad", panel: "#111a2a", accent: "#6f9cff" },
+      colors: { ink: "#05070c", paper: "#eaf0fa", muted: "#8996ad", panel: "#0b101a", accent: "#6f9cff" },
     },
   },
   plugins: [],
