@@ -5,6 +5,10 @@ const projects = [
   { id: "phishing-detection", number: "01", accent: "violet", title: "Phishing Detection", description: "A text-classification baseline that uses TF-IDF and logistic regression to distinguish malicious email from legitimate messages.", detail: "Python · scikit-learn · CEAS 2008" },
   { id: "project-02", number: "02", accent: "blue", title: "Project 02", description: "A short overview of this project will go here: what it does, the problem it solves, and the ideas behind its design and implementation.", detail: "Add the project’s tools, role, and key outcomes here." },
 ];
+const experiences = [
+  { title: "Undergraduate Research Office Assistant", organizationDates: "NC State | August - Present", summary: "Worked with designing and building a centralized dataset with sensitive student researcher information to facilitate data entry and visualization." },
+  { title: "EP Programs Support Student Intern", organizationDates: "NC State | July 6 - August 14", summary: "Worked with the emergency preparedness team at NC State to organize insurance data and policy procedure documents." },
+];
 const cipherCharacters = "0123456789#%XY";
 
 function DecryptText({ text, trigger }: { text: string; trigger?: number }) {
@@ -51,14 +55,14 @@ function DecryptText({ text, trigger }: { text: string; trigger?: number }) {
   );
 }
 
-function ExperienceCard() {
+function ExperienceCard({ experience }: { experience: (typeof experiences)[number] }) {
   const [activation, setActivation] = useState(0);
 
   return (
     <article onMouseEnter={() => setActivation((value) => value + 1)} className="experience-card group rounded-xl border border-white/[0.08] bg-[#090909] p-6 transition-transform duration-150 hover:scale-[1.02]">
-      <h2 className="font-display text-2xl font-bold tracking-[-0.04em]">Role title</h2>
-      <p className="mt-2 text-sm text-muted"><DecryptText text="Organization · Dates" trigger={activation} /></p>
-      <p className="mt-4 max-w-lg text-sm leading-6 text-paper/70">Add a short summary of your responsibilities, contributions, and experience here.</p>
+      <h2 className="font-display text-2xl font-bold tracking-[-0.04em]">{experience.title}</h2>
+      <p className="mt-2 text-sm text-muted"><DecryptText text={experience.organizationDates} trigger={activation} /></p>
+      <p className="mt-4 max-w-lg text-sm leading-6 text-paper/70">{experience.summary}</p>
     </article>
   );
 }
@@ -246,12 +250,15 @@ export default function App() {
           </div><div className="absolute bottom-0 left-6 right-6 h-px bg-white/10 sm:left-10 sm:right-10 lg:left-12 lg:right-12" />
         </section>
         <section id="about" className="px-6 py-20 sm:px-10 sm:py-24 lg:px-12">
-          <div className="mx-auto grid max-w-7xl gap-10 border-b border-white/10 pb-8 md:grid-cols-[1.2fr_0.8fr] md:items-end">
+          <div className="mx-auto grid max-w-7xl gap-10 border-b border-white/10 pb-8 md:grid-cols-[1.2fr_0.8fr] md:items-start">
             <div>
               <p className="section-label">About</p>
-              <p className="mt-5 max-w-2xl text-base leading-7 text-paper/75 sm:text-lg sm:leading-8">A short introduction about my background, interests, and what I’m currently exploring will go here.</p>
+              <div className="mt-5 max-w-2xl space-y-4 text-base leading-7 text-paper/75 sm:text-lg sm:leading-8">
+                <p>I’m a senior computer science student at NC State with an interest in backend systems, machine learning, and data pipelines. I’m currently looking for an opportunity to gain experience in the field.</p>
+                <p>I have 2–3 years of experience with Java, designing and building structured, object-oriented systems. Outside of coursework, I take on self-directed projects every few weeks to learn industry-standard skills and practices.</p>
+              </div>
             </div>
-            <dl className="grid grid-cols-2 gap-5">
+            <dl className="grid gap-5 md:mt-8">
               <div>
                 <dt className="section-label">Location</dt>
                 <dd className="mt-3 text-sm text-paper/80 sm:text-base">North Carolina</dd>
@@ -267,12 +274,12 @@ export default function App() {
           <div className="mx-auto max-w-7xl">
             <p className="section-label">Experience</p>
             <div className="mt-8 grid gap-4 border-t border-white/10 pt-8">
-              {[0, 1].map((role) => <ExperienceCard key={role} />)}
+              {experiences.map((experience) => <ExperienceCard key={experience.title} experience={experience} />)}
             </div>
             <div className="mt-14 border-t border-white/10 pt-8">
               <p className="section-label">Skills</p>
               <ul className="mt-5 flex flex-wrap gap-2" aria-label="Skills">
-                {["TypeScript", "React", "Tailwind CSS", "Git"].map((skill) => <li key={skill} className="rounded-full border border-white/10 px-4 py-2 text-sm text-paper/75">{skill}</li>)}
+                {["Java", "Python", "C", "C#", "TypeScript", "SQL", "React", "pandas", "scikit-learn", "Node.js", "Git", "REST API", "Data Pipelines", "Tailwind CSS"].map((skill) => <li key={skill} className="rounded-full border border-white/10 px-3 py-1.5 text-sm text-paper/75">{skill}</li>)}
               </ul>
             </div>
           </div>
