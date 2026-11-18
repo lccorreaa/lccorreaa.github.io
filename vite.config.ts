@@ -17,7 +17,7 @@ export default defineConfig({
         main: resolve(root, "index.html"),
         work: resolve(root, "work/index.html"),
         phishingDetection: resolve(root, "phishing-detection/index.html"),
-        project02: resolve(root, "project-02/index.html"),
+        networkIntrusionDetection: resolve(root, "network-intrusion-detection/index.html"),
       },
     },
   },

@@ -2,8 +2,8 @@ import "./style.css";
 import { type MouseEvent, useCallback, useEffect, useRef, useState } from "react";
 
 const projects = [
-  { id: "phishing-detection", route: "phishing-detection", number: "01", accent: "violet", title: "Phishing Detection", description: "A text-classification baseline that uses TF-IDF and logistic regression to distinguish malicious email from legitimate messages.", detail: "Python · scikit-learn · CEAS 2008" },
-  { id: "network-intrusion-detection", route: "project-02", number: "02", accent: "blue", title: "Network Intrusion Detection", description: "Supervised deep learning for network intrusion detection with a multilayer perceptron and confusion-matrix analysis.", detail: "Python · scikit-learn · CIC-IDS2017" },
+  { id: "network-intrusion-detection", route: "network-intrusion-detection", number: "01", accent: "blue", title: "Network Intrusion Detection", description: "Supervised deep learning for network intrusion detection with a multilayer perceptron and confusion-matrix analysis.", detail: "Python · scikit-learn · CIC-IDS2017" },
+  { id: "phishing-detection", route: "phishing-detection", number: "02", accent: "violet", title: "Phishing Detection", description: "A text-classification baseline that uses TF-IDF and logistic regression to distinguish malicious email from legitimate messages.", detail: "Python · scikit-learn · CEAS 2008" },
 ];
 const experiences = [
   { title: "Undergraduate Research Office Assistant", organizationDates: "NC State | August - Present", summary: "Worked with designing and building a centralized dataset with sensitive student researcher information to facilitate data entry and visualization." },
@@ -85,7 +85,7 @@ function PhishingDetectionPage() {
   return (
     <article className="px-6 pb-24 pt-28 sm:px-10 sm:pb-32 sm:pt-36 lg:px-12">
       <div className="mx-auto w-full max-w-7xl">
-        <p className="section-label">Project 01 · Email security · Text classification</p>
+        <p className="section-label">Project 02 · Email security · Text classification</p>
         <h1 className="mt-6 max-w-5xl font-display text-5xl font-medium tracking-[-0.06em] sm:text-7xl">Phishing Detection</h1>
         <p className="mt-6 max-w-3xl text-lg leading-8 text-paper/75 sm:text-xl">A supervised email classification baseline using TF-IDF features and logistic regression to distinguish malicious messages from legitimate email.</p>
         <div className="mt-16 grid gap-14 border-t border-white/10 pt-12 lg:grid-cols-[1.25fr_.75fr]">
@@ -107,7 +107,7 @@ function NetworkIntrusionDetectionPage() {
   return (
     <article className="px-6 pb-24 pt-28 sm:px-10 sm:pb-32 sm:pt-36 lg:px-12">
       <div className="mx-auto w-full max-w-7xl">
-        <p className="section-label">Project 02 · Network security · Supervised learning</p>
+        <p className="section-label">Project 01 · Network security · Supervised learning</p>
         <h1 className="mt-6 max-w-5xl font-display text-5xl font-medium tracking-[-0.06em] sm:text-7xl">Network Intrusion Detection</h1>
         <p className="mt-6 max-w-3xl text-lg leading-8 text-paper/75 sm:text-xl">A multilayer perceptron trained on CIC-IDS2017 flow features to classify benign traffic and attack categories. Model 10 adds class-specific decision thresholds to prioritize attack detection.</p>
 
@@ -120,23 +120,13 @@ function NetworkIntrusionDetectionPage() {
 
             <section>
               <h2 className="font-display text-3xl font-semibold tracking-[-0.04em]">Method</h2>
-              <ol className="mt-5 space-y-4 text-paper/75">
-                {[
-                  ["01", "Baseline", "Sample up to 50,000 records from each of eight CSV files (about 400,000 total); use an 80/20 stratified train/test split."],
-                  ["02", "Preprocess", "Impute missing numeric values with training-set medians and standardize features using training-set statistics."],
-                  ["03", "Train", "Fit a 64/32-unit MLP with ReLU activations, Adam optimization, and early stopping. Later iterations raised the per-file sample limit to 170,366 and oversampled selected rare attacks in fitting data only."],
-                  ["04", "Calibrate", "For Model 10, hold out 20% (296,233 rows) as test data. Split 15% of the remaining data (177,740 rows) for validation; fit on 1,007,191 original rows before oversampling. Tune lower class-specific thresholds on validation data, then evaluate once on the held-out test set."],
-                ].map(([number, title, description]) => <li key={number} className="grid gap-1 sm:grid-cols-[52px_1fr]"><span className="text-xs font-semibold tracking-[.16em] text-accent">{number}</span><div><h3 className="font-medium text-paper">{title}</h3><p className="mt-1 text-sm leading-6 text-muted">{description}</p></div></li>)}
-              </ol>
+              <p className="mt-4 max-w-3xl leading-7 text-paper/75">The first model was a baseline scikit-learn multilayer perceptron. It sampled up to 50,000 rows from each of the eight CSV files (about 400,000 rows total), used an 80/20 stratified train/test split, filled missing feature values with training-set medians, and standardized numeric features. Its network had hidden layers of 64 and 32 units and trained with ReLU, Adam, and early stopping. We then increased the per-file sample limit to 170,366, reduced feature memory use, and oversampled selected rare attacks in the fit data only. Model 10 added a separate validation set to choose lower, class-specific decision thresholds for labels with weak recall; the test set was kept out of this calibration.</p>
             </section>
 
             <section>
               <h2 className="font-display text-3xl font-semibold tracking-[-0.04em]">Results</h2>
-              <p className="mt-4 max-w-3xl leading-7 text-paper/75">Model 10 used 1,481,164 rows and 78 numeric features. Compared with ordinary argmax predictions, validation-calibrated thresholds increased binary attack recall from 96.95% to 97.67%, correctly flagging 375 additional attacks (51,254 vs. 50,879) and missing 375 fewer (1,225 vs. 1,600). This came with 414 more benign rows flagged as attacks (7,034 vs. 6,620). Multiclass accuracy decreased slightly, from 97.21% to 97.13%.</p>
-              <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                <div className="rounded-xl border border-white/[0.08] bg-panel p-5"><p className="section-label">Binary attack recall</p><p className="mt-3 font-display text-3xl tracking-[-0.04em]">96.95% <span className="text-muted">→</span> 97.67%</p><p className="mt-2 text-sm text-muted">Argmax to calibrated thresholds</p></div>
-                <div className="rounded-xl border border-white/[0.08] bg-panel p-5"><p className="section-label">Multiclass accuracy</p><p className="mt-3 font-display text-3xl tracking-[-0.04em]">97.21% <span className="text-muted">→</span> 97.13%</p><p className="mt-2 text-sm text-muted">Argmax to calibrated thresholds</p></div>
-              </div>
+              <p className="mt-4 max-w-3xl leading-7 text-paper/75">Model 10 used 1,481,164 rows and 78 numeric features. First, 20% was held out for testing. Of the remaining rows, 15% was used for validation and 1,007,191 original rows were used for fitting before oversampling. The test split contained 435 Web Attack examples: 301 Brute Force, 4 SQL Injection, and 130 XSS. Ordinary argmax predictions flagged 54 of those examples as some type of attack and treated 381 as benign. Calibrated thresholds flagged 417 as an attack and treated 18 as benign: 363 more of the 435 were flagged. Binary attack recall was 97.67%, meaning the model flagged about 98 out of every 100 actual attacks as attacks. Multiclass accuracy was 97.13%, meaning it assigned the exact label correctly for about 97 out of every 100 test rows.</p>
+              <p className="mt-4 max-w-3xl leading-7 text-paper/75">The thresholded model was less reliable at naming the exact Web Attack subtype. The flow features available to this MLP can make Brute Force, SQL Injection, and XSS difficult to distinguish. Brute Force recall rose from 0.12 to 0.48 while precision fell from 0.97 to 0.60; XSS recall rose from 0.03 to 0.68 while precision fell from 0.80 to 0.15. SQL Injection recall remained 0.00. The 417 Web Attack examples flagged as attacks were not necessarily assigned the correct Web Attack subtype. I kept Model 10 because, in this security context, a Type II error - classifying an actual attack as benign and allowing it through - is more costly than a false alarm or an incorrect attack subtype.</p>
               <figure className="mt-8">
                 <div className="overflow-hidden rounded-xl border border-white/10 bg-white p-2"><img src={`${import.meta.env.BASE_URL}images/network-intrusion-confusion-matrix.png`} alt="Row-normalized confusion matrix for Model 10 on the CIC-IDS2017 test set. It shows strong recall for common classes and lower recall for rare infiltration and web attack categories." className="block h-auto w-full" loading="lazy" /></div>
                 <figcaption className="mt-3 text-sm leading-6 text-muted">Model 10 confusion matrix on the held-out test set. Cells show the share of each actual class assigned to each predicted class.</figcaption>
@@ -144,13 +134,8 @@ function NetworkIntrusionDetectionPage() {
             </section>
 
             <section>
-              <h2 className="font-display text-3xl font-semibold tracking-[-0.04em]">Threshold trade-offs</h2>
-              <p className="mt-4 max-w-3xl leading-7 text-paper/75">Class-specific thresholds improved recall for Web Attack Brute Force (0.12 → 0.48) and XSS (0.03 → 0.68), while SQL Injection recall remained 0.00. The gain in detection came at lower subtype precision: Brute Force precision fell from 0.97 to 0.60, and XSS precision from 0.80 to 0.15. Numeric flow features can indicate malicious activity without reliably separating similar web-attack subtypes. I retained Model 10 because, for this use case, a missed attack (Type II error) carries greater cost than an additional false alarm or an incorrect attack subtype.</p>
-            </section>
-
-            <section>
               <h2 className="font-display text-3xl font-semibold tracking-[-0.04em]">Rare-class limitations</h2>
-              <p className="mt-4 max-w-3xl leading-7 text-paper/75">Heartbleed had only six sampled records, with one in the test set; its 0.00 recall is therefore based on a single test example. Infiltration had 36 records: 25 for fitting before oversampling, four for validation, and seven for testing. Repeating the 25 fitting examples to produce 1,025 oversampled rows did not add new attack behavior. Infiltration test recall was 0.29. Both classes require more independent examples for reliable training and evaluation.</p>
+              <p className="mt-4 max-w-3xl leading-7 text-paper/75">Heartbleed and Infiltration had too few distinct examples for the model to learn their patterns reliably. The sampled data contained only six Heartbleed rows, with one in the test set; its zero recall is therefore based on a single test case. It contained 36 Infiltration rows: 25 for fitting before oversampling, four for validation, and seven for testing. Oversampling repeated the 25 fit examples to 1,025 rows but did not add new attack behavior. Infiltration recall was 0.29 on the test set. More independent examples are needed to train and evaluate both classes with confidence.</p>
             </section>
           </div>
 
@@ -186,8 +171,8 @@ function AbstractGraphic() {
 export default function App() {
   const [pathname, setPathname] = useState(() => window.location.pathname);
   const isWorkPage = pathname.endsWith("/work") || pathname.endsWith("/work/") || pathname.endsWith("/work/index.html");
-  const projectPageNumber = pathname.match(/\/project-(02)(?:\/|$)/)?.[1];
   const isPhishingDetectionPage = /\/phishing-detection(?:\/|$)/.test(pathname);
+  const isNetworkIntrusionPage = /\/network-intrusion-detection(?:\/|$)/.test(pathname);
   const [activeProjectIndex, setActiveProjectIndex] = useState(0);
   const cursorRef = useRef<HTMLDivElement>(null);
   const starfieldRef = useRef<HTMLDivElement>(null);
@@ -310,7 +295,7 @@ export default function App() {
         </nav>
       </header>
       <main>
-        {isPhishingDetectionPage ? <PhishingDetectionPage /> : projectPageNumber === "02" ? <NetworkIntrusionDetectionPage /> : projectPageNumber ? <section className="flex min-h-[calc(100vh-80px)] items-center px-6 py-28 sm:px-10 lg:px-12"><div className="mx-auto w-full max-w-7xl"><p className="section-label">Project {projectPageNumber}</p><h1 className="mt-6 max-w-4xl font-display text-5xl font-medium tracking-[-0.06em] sm:text-7xl">Project details coming soon.</h1><a href={`${import.meta.env.BASE_URL}work/`} className="mt-10 inline-flex items-center gap-2 text-sm text-muted transition-colors hover:text-paper">← Back to work</a></div></section> : <>
+        {isPhishingDetectionPage ? <PhishingDetectionPage /> : isNetworkIntrusionPage ? <NetworkIntrusionDetectionPage /> : <>
         {!isWorkPage && <>
         <section id="home" className="relative flex min-h-[740px] items-center px-6 pb-28 pt-32 sm:px-10 lg:min-h-screen lg:px-12">
           <div className="absolute inset-0 -z-0 overflow-hidden"><AbstractGraphic /></div>
@@ -378,7 +363,7 @@ export default function App() {
         </>}
         </>}
       </main>
-      {!isWorkPage && !projectPageNumber && !isPhishingDetectionPage && <footer id="contact" className="px-6 pb-5 sm:px-10 lg:px-12"><div className="mx-auto grid max-w-7xl grid-cols-2 items-center gap-x-4 gap-y-3 border-t border-white/10 pt-4 text-center sm:grid-cols-[1fr_auto_auto] sm:gap-5 sm:pt-5"><span className="col-start-1 row-start-2 justify-self-start text-[11px] text-muted sm:row-start-1">© {new Date().getFullYear()} Lucas Correa</span><div className="col-span-2 row-start-1 flex items-center justify-center gap-4 text-xs sm:col-span-1 sm:col-start-2 sm:row-start-1 sm:justify-end sm:gap-5 sm:text-sm"><span className="break-all">lucas.c.correa1@gmail.com</span><span>999-999-9999</span></div><a href="#home" className="col-start-2 row-start-2 justify-self-end text-[11px] text-muted transition hover:text-paper sm:col-start-3 sm:row-start-1">Back to top ↑</a></div></footer>}
+      {!isWorkPage && !isPhishingDetectionPage && !isNetworkIntrusionPage && <footer id="contact" className="px-6 pb-5 sm:px-10 lg:px-12"><div className="mx-auto grid max-w-7xl grid-cols-2 items-center gap-x-4 gap-y-3 border-t border-white/10 pt-4 text-center sm:grid-cols-[1fr_auto_auto] sm:gap-5 sm:pt-5"><span className="col-start-1 row-start-2 justify-self-start text-[11px] text-muted sm:row-start-1">© {new Date().getFullYear()} Lucas Correa</span><div className="col-span-2 row-start-1 flex items-center justify-center gap-4 text-xs sm:col-span-1 sm:col-start-2 sm:row-start-1 sm:justify-end sm:gap-5 sm:text-sm"><span className="break-all">lucas.c.correa1@gmail.com</span><span>999-999-9999</span></div><a href="#home" className="col-start-2 row-start-2 justify-self-end text-[11px] text-muted transition hover:text-paper sm:col-start-3 sm:row-start-1">Back to top ↑</a></div></footer>}
       </div>
     </div>
   );
